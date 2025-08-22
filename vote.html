@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Would You Rather</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      height: 100vh;
+      display: flex;
+      font-family: 'Impact', 'Arial Black', sans-serif;
+      color: white;
+      overflow: hidden;
+      transition: background 0.5s ease;
+    }
+
+    .option {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      cursor: pointer;
+      transition: flex 0.5s ease, font-size 0.5s ease;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .option:hover {
+      flex: 1.2;
+      font-size: 2.8rem;
+    }
+
+    .red { background: linear-gradient(135deg, #ff1e1e, #a60000); }
+    .blue { background: linear-gradient(135deg, #0066ff, #001a80); }
+
+    .results {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.6);
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 1.2rem;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    .end-screen {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: black;
+      color: white;
+      font-size: 3rem;
+      filter: grayscale(100%);
+    }
+  </style>
+</head>
+<body>
+  <div class="option red" onclick="vote('A')"></div>
+  <div class="option blue" onclick="vote('B')"></div>
+
+  <div class="results" id="results">Click an option to vote</div>
+
+  <script>
+    let votesA = 0, votesB = 0;
+    let currentQuestion = 0;
+
+    const questions = [
+      {
+        A: "Be able to slap Enmu whenever you want",
+        B: "Be able to slap Harsh whenever you want"
+      },
+      {
+        A: "Live in Kaizo’s body for a day",
+        B: "Live with a snake instead"
+      },
+      {
+        A: "Read Enmu and Kaizo’s chat",
+        B: "Know what Evara does when she’s offline"
+      },
+      {
+        A: "Become an admin",
+        B: "Become Enmu’s dad’s friend"
+      }
+    ];
+
+    function loadQuestion() {
+      if (currentQuestion < questions.length) {
+        document.querySelector(".red").innerText = questions[currentQuestion].A;
+        document.querySelector(".blue").innerText = questions[currentQuestion].B;
+        document.getElementById("results").innerHTML = "Click an option to vote";
+        votesA = 0; votesB = 0;
+      } else {
+        // End screen
+        document.body.innerHTML = '<div class="end-screen">Hogya khatam gandu</div>';
+      }
+    }
+
+    function vote(option) {
+      if (option === 'A') votesA++;
+      else votesB++;
+
+      let total = votesA + votesB;
+      let percentA = ((votesA / total) * 100).toFixed(1);
+      let percentB = ((votesB / total) * 100).toFixed(1);
+
+      document.getElementById("results").innerHTML =
+        `🔥 Red: ${percentA}% (${votesA} votes) | ❄️ Blue: ${percentB}% (${votesB} votes)`;
+
+      // Move to next question after 2 seconds
+      setTimeout(() => {
+        currentQuestion++;
+        loadQuestion();
+      }, 2000);
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
